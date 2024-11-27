@@ -2,7 +2,6 @@ from nicegui import ui
 import pandas as pd
 
 ###############################################################################
-# Function to create a highchart component for a given dataframe and field
 def create_bar_highchart(df, x_col, y_col, title, x_axis_title, y_axis_title):
     chart_data = [{'name': row[x_col], 'y': row[y_col]} for _, row in df.iterrows()]
     
@@ -25,6 +24,26 @@ def create_bar_highchart(df, x_col, y_col, title, x_axis_title, y_axis_title):
     })
     
 ########################
+def create_bar_highchart(df, x_col, y_col, title, x_axis_title, y_axis_title):
+    chart_data = [{'name': row[x_col], 'y': row[y_col]} for _, row in df.iterrows()]
+    
+    ui.highchart({
+        'chart': {'type': 'column'},
+        'title': {'text': title},
+        'xAxis': {'type': 'category', 'title': {'text': x_axis_title}}, 
+        'yAxis': {'title': {'text': y_axis_title}},
+        'legend': {'enabled': False},
+        'series': [{
+            'name': y_axis_title,
+            'data': chart_data,
+            'colorByPoint': True,
+        }],
+        'plotOptions': {
+            'column': {
+                'dataLabels': {'enabled': True}
+            }
+        },
+    })
 def create_line_highchart(df, x_col, y_col, title, x_axis_title, y_axis_title):
     chart_data = [{'name': row[x_col], 'y': row[y_col]} for _, row in df.iterrows()]
     
@@ -835,7 +854,7 @@ rec_cols_and_titles = [
     (['Player','XPlayer', 'Pos', 'Cum_Mean_ADOT'], 'Cum_Mean_ADOT', "Avg Receiving ADOT", "ADOT")
 ]
 
-team_pass_cols = ['Player', 'XPlayer', 'Pos','Cmp', 'Att', 'Yds','YA_Catch' ,'Tds' ,'Drops' ,'Sk' ,'Bltz' ,'Yds/Att' ,'Cum_Mean_QB_Rate']
+team_pass_cols = ['Player', 'XPlayer', 'Pos', 'Cmp', 'Att', 'Yds' ,'YA_Catch','Tds','Drops' , 'Sk','Bltz' ,'Y ds/Att' , 'Cum_Mean_QB_Rate']
 
 
 #### constants for def display_player_stats
@@ -852,19 +871,9 @@ player_pass_cols_and_titles = [
     (['Player', 'XTm', 'Tm', 'Pos', 'Date', 'pass_QB_Rate'], 'pass_QB_Rate', "Passing Avg QB Rate", "QB Rating"),
 ]
 
-# player_rush_cols_and_titles = [
-#    (
-#        [col for col in cols if col != 'XPlayer'][:-1] + [f"rush_{cols[-1]}"] + ['XTm', 'Tm', 'Date'],  # Add prefix to last element and new columns
-#        f"rush_{column}",  # Add 'rush_' prefix to the column
-#        title.replace("Total", "Rushing Avg"),  # Replace "Total" with "Rushing Avg"
-#       y_label
-#    )
-#    for cols, column, title, y_label in rush_cols_and_titles
-#]
-
 player_rush_cols_and_titles = [
     (['Player', 'XTm', 'Tm', 'Pos', 'Date', 'rush_Att'], 'rush_Att', "Rushing Avg Attempts", "Rushing Attempts"),
-    (['Player', 'XTm', 'Tm', 'Pos', 'Date','rush_Yds'], 'rush_Yds', "Rushing Avg Yards", "Rushing Yards"),
+    (['Player', 'XTm', 'Tm', 'Pos', 'Date', 'rush_Yds'], 'rush_Yds', "Rushing Avg Yards", "Rushing Yards"),
     (['Player', 'XTm', 'Tm', 'Pos', 'Date', 'rush_Tds'], 'rush_Tds', "Rushing Avg Touchdowns", "Rushing Touchdowns"),
     (['Player', 'XTm', 'Tm', 'Pos', 'Date', 'rush_Yds/Att'], 'rush_Yds/Att', "Rushing Avg Yds/Att", "Yards/Attempt")
 ]
